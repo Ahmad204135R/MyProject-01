@@ -1,0 +1,150 @@
+// This code is written by Ahmed Abu-awwad
+// The idea of the program is from the course of algorithms and problem solving level 2, Mr. Muhammad Abu Hadhood
+// Course link : https://programmingadvices.com/courses/enrolled/1811531
+
+#include <iostream>
+using namespace std;
+
+enum enRockOrPaperOrScissors {Rock=1,Paper=2,Scissors=3};
+enum enResultGame { PlayerWinner=1, ComputerWinner=2, NoWinner=3};
+
+int ReadRoundsNumber() {
+	int roundnum=0;
+	cout << "Enter Rounds Number : ";
+	cin >> roundnum;
+	cout << endl;
+	return roundnum;
+}
+
+int ReadRockOrPaperOrScissors() {
+	int Choice=0;
+	cout << "your choice: [1]:rock , [2]:paper , [3]:scissors ? ";
+	cin >> Choice;
+	return Choice;
+}
+string Choiced(int YourChoice) {
+	switch (enRockOrPaperOrScissors(YourChoice)) {
+	case enRockOrPaperOrScissors::Rock:
+		return "Rock";
+	case enRockOrPaperOrScissors::Paper:
+		return "Paper";
+	case enRockOrPaperOrScissors::Scissors:
+		return "Scissors";
+	}
+}
+int RandomNumber(int Frome, int To) {
+	int randNum = rand() % (To - Frome + 1) + Frome;
+	return randNum;
+}
+
+
+
+
+string Winner(string PlayerChoice,string ComputerChoice) {
+	
+	if (PlayerChoice == ComputerChoice) {
+		system("color 6F");
+		
+		return "No Winner";
+	}
+	else if ((PlayerChoice == "Rock" && ComputerChoice == "Scissors") || (PlayerChoice == "Paper" && ComputerChoice == "Rock") || (PlayerChoice == "Scissors" && ComputerChoice == "Paper")) {
+		system("color 2F");
+		
+		return "Player Winner";
+    }
+	else if ((PlayerChoice == "Rock" && ComputerChoice == "Paper") || (PlayerChoice == "Paper" && ComputerChoice == "Scissors") || (PlayerChoice == "Scissors" && ComputerChoice == "Rock")) {
+		system("color 4F");
+		cout << "\a";
+		
+		return "Computer Winner";
+}
+	}
+
+int Player1WonTimes(int& CPlayer) {
+	return CPlayer;
+}
+int ComputerWonTimes(int& CComputer) {
+	return CComputer;
+}
+int DrawTimes(int& CDraw) {
+	return CDraw;
+}
+
+void GetResultGame(string RoundWinner,int& CPlayer,int& CComputer,int& CDraw) {
+	
+	if (RoundWinner == "Player Winner")
+		CPlayer++;
+	else if (RoundWinner == "No Winner")
+		CDraw++;
+	else if (RoundWinner == "Computer Winner")
+		CComputer++;
+}
+
+void ResultRound(int NumRound, string PlayerChoice, string ComputerChoice, string RoundWinner) {
+	cout << "\n___________________Round(" << NumRound << ")____________________\n" << endl;
+	cout << "Player1 Choice : " << PlayerChoice << endl;
+	cout << "Computer Choice : " <<ComputerChoice << endl;
+	cout << "Round Winner : " << RoundWinner << endl;
+	cout << "_______________________________________________\n" << endl;
+}		
+void Round(int NumRound,int& CPlayer, int& CComputer, int& CDraw) {
+	cout << "Round (" << NumRound << "): " << endl;
+	int YourChoice = ReadRockOrPaperOrScissors();
+	int Computer = RandomNumber(1, 3);
+	string PlayerChoice = Choiced(YourChoice), ComputerChoice = Choiced(Computer),RoundWinner = Winner(PlayerChoice, ComputerChoice);
+	GetResultGame(RoundWinner,CPlayer,CComputer, CDraw);
+	ResultRound(NumRound, PlayerChoice, ComputerChoice, RoundWinner);
+	
+}
+
+
+
+string FinalWinner(int& CPlayer, int& CComputer, int& CDraw) {
+	if (CPlayer > CComputer)
+		return "Player1";
+	else if (CComputer > CPlayer)
+		return "Computer";
+	else
+		return "No Winner";
+	
+}
+
+
+
+void Rounds(int RoundNum, int& CPlayer, int& CComputer, int& CDraw) {
+	for (int i = 1; i <= RoundNum; i++) { 
+		Round(i,CPlayer, CComputer,CDraw);
+	}
+}
+void Results(int RoundNum,int& CPlayer, int& CComputer, int& CDraw) {
+	cout << "----------------------------------------------------------\n" << endl;
+	cout << "\t\t+++  G A M E  O V E R  +++" << endl;
+	cout << "\n----------------------------------------------------------" << endl;
+	cout << "Game Rounds       : " << RoundNum << endl;
+	cout << "Player1 won times : " << Player1WonTimes(CPlayer) << endl;
+	cout << "Computer won times: " << ComputerWonTimes(CComputer) << endl;
+	cout << "Draw times        : " << DrawTimes(CDraw) << endl;
+	cout << "Final Winner      : " << FinalWinner(CPlayer,CComputer,CDraw) << endl;
+	cout << "\n----------------------------------------------------------" << endl;
+}
+
+void Start() {
+	
+	char Again = 'N';
+	do {
+		int RoundNum = ReadRoundsNumber(),CPlayer=0,CComputer=0,CDraw=0;
+		Rounds(RoundNum,CPlayer, CComputer, CDraw);
+		Results(RoundNum,CPlayer,CComputer,CDraw);
+		cout << "Do You Want To Play Again? Y/N? ";
+		cin >> Again; 
+	} while (Again == 'Y' );
+}
+
+int main()
+{
+	srand((unsigned)time(NULL));
+
+	Start();
+
+	return 0;
+}
